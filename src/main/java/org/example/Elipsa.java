@@ -19,6 +19,7 @@ public class Elipsa extends Tvar {
         }
     }
 
+
     @Override
     public Map<String, Object> getAttributes() {
         Map<String, Object> attributes = super.getAttributes();

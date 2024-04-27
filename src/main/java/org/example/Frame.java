@@ -5,9 +5,14 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import java.awt.*;
 
+
 public class Frame extends JFrame {
     private Panel panel;
     private JTable tabulkaTvaru;
+
+    private JMenuBar menuBar;
+    private JMenu menu;
+    private JMenuItem menuItemEditor;
     private ModelTabulkyTvaru model;
     private JTable tabulkaAtributu;
     private ModelTabulkyAtributu atributyModel;
@@ -22,8 +27,13 @@ public class Frame extends JFrame {
         initTabulkuTvaru();
         initTabulkuAtributu();
         addShapes();
+        initMenu();
         add(panel, BorderLayout.CENTER);  // Panel s vykreslenými tvary
         configureAndAddTablesToBottom();
+    }
+
+    private void initMenu(){
+
     }
 
 
@@ -65,6 +75,7 @@ public class Frame extends JFrame {
     }
 
 
+
     private void initUI() {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(800, 600);
@@ -86,7 +97,4 @@ public class Frame extends JFrame {
         model.addShape(tvar);
     }
 
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> new Frame());
-    }
 }

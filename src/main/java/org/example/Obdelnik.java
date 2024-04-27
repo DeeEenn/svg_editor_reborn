@@ -2,6 +2,10 @@ package org.example;
 
 import java.awt.*;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.List;
+import java.util.ArrayList;
 
 public class Obdelnik extends Tvar {
     int sirka, vyska;
@@ -33,6 +37,7 @@ public class Obdelnik extends Tvar {
         return attributes;
     }
 
+
     @Override
     public void kresli(Graphics g) {
         Graphics2D g2d = (Graphics2D) g;
@@ -40,4 +45,5 @@ public class Obdelnik extends Tvar {
         g2d.setStroke(new BasicStroke(getTloustka()));
         g2d.drawRect(getX(), getY(), sirka, vyska);
     }
+
 }

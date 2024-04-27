@@ -10,6 +10,7 @@ public abstract class Tvar {
     Color barva;
     String nazev;
 
+
     public Tvar(int x, int y, String nazev, Color barva, int tloustka) {
         this.x = x;
         this.y = y;
@@ -55,6 +56,7 @@ public abstract class Tvar {
         attributes.put("Šířka čáry", tloustka);
         return attributes;
     }
+
 
     public abstract void kresli(Graphics g);
 

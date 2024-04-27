@@ -12,6 +12,7 @@ public class Usecka extends Tvar {
         this.y2 = y2;
     }
 
+
     @Override
     public void setAttribute(String key, Object value) {
         super.setAttribute(key, value);  // Volání metody v nadřazené třídě, pokud se nejedná o atribut specifický pro Line
