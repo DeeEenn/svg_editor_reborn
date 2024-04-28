@@ -44,7 +44,7 @@ public abstract class Tvar {
                         this.barva = Color.decode((String) value);
                     }
                     break;
-                case "Šířka čáry":
+                case "Tloušťka":
                     this.tloustka = Integer.parseInt(value.toString());
                     break;
                 case "X":
@@ -65,7 +65,7 @@ public abstract class Tvar {
         attributes.put("Barva", barva);
         attributes.put("X", x);
         attributes.put("Y", y);
-        attributes.put("Šířka čáry", tloustka);
+        attributes.put("Tloušťka", tloustka);
         return attributes;
     }
 

@@ -18,6 +18,19 @@ public class Panel extends JPanel {
         repaint();
     }
 
+    public void setShapes(List<Tvar> newShapes) {
+        this.tvary = newShapes;
+        repaint();  // Po změně seznamu tvary, překresli panel
+    }
+
+    public Obrazek getCurrentImage() {
+        Obrazek image = new Obrazek();
+        for (Tvar tvar : tvary) { // předpokládá, že `tvary` je seznam tvarů
+            image.getTvary().add(tvar);
+        }
+        return image;
+    }
+
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);

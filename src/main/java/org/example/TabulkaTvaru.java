@@ -8,5 +8,6 @@ public class TabulkaTvaru extends JTable {
     public TabulkaTvaru() {
         model = new ModelTabulkyTvaru();
         setModel(model);
+
     }
 }

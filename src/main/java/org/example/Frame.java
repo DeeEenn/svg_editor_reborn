@@ -14,6 +14,7 @@ public class Frame extends JFrame {
 
     private JMenuBar menuBar;
     private JMenu menu;
+
     private JMenuItem menuItemEditor;
     private ModelTabulkyTvaru model;
     private JTable tabulkaAtributu;
@@ -38,8 +39,13 @@ public class Frame extends JFrame {
 
     private void initMenu(){
         menuBar = new JMenuBar();
-        menu = new JMenu("Soubor");
+        menu = new JMenu("MENU");
         menuItemZobrazitSVG = new JMenuItem("Zobrazit SVG");
+
+       JMenu menuSaving = new JMenu("Soubor");
+       JMenuItem ulozitSVG = new JMenuItem("Uložit SVG");
+        JMenuItem nacistXML= new JMenuItem("Načíst XML");
+        JMenuItem ulozitXML = new JMenuItem("Ulozit XML");
 
         menuItemZobrazitSVG.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -48,6 +54,10 @@ public class Frame extends JFrame {
         });
 
         menu.add(menuItemZobrazitSVG);
+        menuSaving.add(ulozitXML);
+        menuSaving.add(ulozitSVG);
+        menuSaving.add(nacistXML);
+        menu.add(menuSaving);
         menuBar.add(menu);
         setJMenuBar(menuBar);
     }
@@ -67,21 +77,43 @@ public class Frame extends JFrame {
     }
 
     private void showSVG() {
-        Obrazek image = createSampleImage();
-        String svgXML = XmlUtils.getXml(image);
+        String originalSvgXml = XmlUtils.getXml(panel.getCurrentImage());
 
-        JTextArea textArea = new JTextArea(svgXML, 25, 70);
+        JTextArea textArea = new JTextArea(originalSvgXml, 25, 70);
         textArea.setEditable(true);
         JScrollPane scrollPane = new JScrollPane(textArea);
-        JOptionPane.showMessageDialog(null, scrollPane, "SVG XML", JOptionPane.INFORMATION_MESSAGE);
+        int option = JOptionPane.showConfirmDialog(null, scrollPane, "Edit SVG XML", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+
+        if (option == JOptionPane.OK_OPTION) {
+            String editedSvgXml = textArea.getText();
+            if (!editedSvgXml.equals(originalSvgXml)) {
+                applySvgChanges(editedSvgXml);
+            } else {
+                JOptionPane.showMessageDialog(null, "Žádné změny nebyly provedeny.", "Informace", JOptionPane.INFORMATION_MESSAGE);
+            }
+        }
     }
 
-    private Obrazek createSampleImage() {
-        Obrazek image = new Obrazek();
-        image.getTvary().add(new Elipsa(100, 100, "Elipsa 1", Color.RED, 5, 50));
-        image.getTvary().add(new Obdelnik(150, 150, "Obdelnik 1", Color.BLUE, 5, 100, 50));
-        image.getTvary().add(new Usecka(200, 200, "Usecka 1", Color.GREEN, 5, 250, 250));
-        return image;
+    private void applySvgChanges(String editedSvgXml) {
+        try {
+            Obrazek updatedObrazek = XmlUtils.getImage(editedSvgXml);
+            updateApplicationState(updatedObrazek);
+        } catch (RuntimeException e) {
+            JOptionPane.showMessageDialog(this, "Error updating from SVG: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+
+    private void updateApplicationState(Obrazek updatedObrazek) {
+        panel.setShapes(updatedObrazek.getTvary());  // Nastaví nově upravené tvary
+        panel.repaint();  // Překreslení panelu s novými tvary
+
+        // Aktualizace datových modelů pro tabulky, pokud to vyžadují
+        model.setShapes(updatedObrazek.getTvary()); // Aktualizuj model tabulky tvary, pokud je to potřeba
+        if (!updatedObrazek.getTvary().isEmpty()) {
+            tabulkaTvaru.setRowSelectionInterval(0, 0); // Vyberte první tvar
+            updateAttributesBasedOnSelectedShape();
+        }
     }
 
 
