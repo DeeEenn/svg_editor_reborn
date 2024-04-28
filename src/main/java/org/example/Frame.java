@@ -46,6 +46,9 @@ public class Frame extends JFrame {
     }
 
     private void initMenu(){
+
+        TabulkaTvaru table = new TabulkaTvaru();
+        table.setModel(model);
         menuBar = new JMenuBar();
         menu = new JMenu("MENU");
         menuItemZobrazitSVG = new JMenuItem("Zobrazit SVG");
@@ -64,6 +67,18 @@ public class Frame extends JFrame {
         ulozitXML.addActionListener(e -> saveShapesToXml());
         ulozitSVG.addActionListener(e -> saveShapesToJson());
         nacistXML.addActionListener(e -> loadShapesFromXml());
+
+        JMenu menuKreslit = new JMenu("Kreslit");
+        JMenuItem menuItemElipsa = new JMenuItem("Elipsa");
+        menuItemElipsa.addActionListener(e -> panel.setCurrentShape(new Elipsa()));
+
+        JMenuItem menuItemObdelnik = new JMenuItem("Obdelník");
+        menuItemObdelnik.addActionListener(e -> panel.setCurrentShape(new Obdelnik()));
+
+
+        menuKreslit.add(menuItemElipsa);
+        menuKreslit.add(menuItemObdelnik);
+        menu.add(menuKreslit);
 
 
         menu.add(menuItemZobrazitSVG);
