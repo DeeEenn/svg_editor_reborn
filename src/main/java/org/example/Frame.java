@@ -1,11 +1,19 @@
 package org.example;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 
 
 public class Frame extends JFrame {
@@ -43,7 +51,7 @@ public class Frame extends JFrame {
         menuItemZobrazitSVG = new JMenuItem("Zobrazit SVG");
 
        JMenu menuSaving = new JMenu("Soubor");
-       JMenuItem ulozitSVG = new JMenuItem("Uložit SVG");
+       JMenuItem ulozitSVG = new JMenuItem("Uložit JSON");
         JMenuItem nacistXML= new JMenuItem("Načíst XML");
         JMenuItem ulozitXML = new JMenuItem("Ulozit XML");
 
@@ -53,6 +61,11 @@ public class Frame extends JFrame {
             }
         });
 
+        ulozitXML.addActionListener(e -> saveShapesToXml());
+        ulozitSVG.addActionListener(e -> saveShapesToJson());
+        nacistXML.addActionListener(e -> loadShapesFromXml());
+
+
         menu.add(menuItemZobrazitSVG);
         menuSaving.add(ulozitXML);
         menuSaving.add(ulozitSVG);
@@ -60,7 +73,73 @@ public class Frame extends JFrame {
         menu.add(menuSaving);
         menuBar.add(menu);
         setJMenuBar(menuBar);
+
     }
+
+    private void saveShapesToXml() {
+        String svgXml = XmlUtils.getXml(panel.getCurrentImage());
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setDialogTitle("Uložit jako XML");
+        int userSelection = fileChooser.showSaveDialog(this);
+
+        if (userSelection == JFileChooser.APPROVE_OPTION) {
+            File fileToSave = fileChooser.getSelectedFile();
+            try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileToSave))) {
+                writer.write(svgXml);
+                JOptionPane.showMessageDialog(this, "Soubor byl úspěšně uložen.", "Uloženo", JOptionPane.INFORMATION_MESSAGE);
+            } catch (IOException e) {
+                JOptionPane.showMessageDialog(this, "Nepodařilo se uložit soubor: " + e.getMessage(), "Chyba", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }
+
+    private void saveShapesToJson() {
+        Obrazek image = panel.getCurrentImage();
+        ObjectMapper mapper = new ObjectMapper();
+
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setDialogTitle("Uložit jako JSON");
+        int userSelection = fileChooser.showSaveDialog(this);
+
+        if (userSelection == JFileChooser.APPROVE_OPTION) {
+            File fileToSave = fileChooser.getSelectedFile();
+            try {
+                mapper.writeValue(fileToSave, image);
+                JOptionPane.showMessageDialog(this, "Soubor byl úspěšně uložen.", "Uloženo", JOptionPane.INFORMATION_MESSAGE);
+            } catch (IOException e) {
+                JOptionPane.showMessageDialog(this, "Nepodařilo se uložit soubor: " + e.getMessage(), "Chyba", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }
+
+    private void loadShapesFromXml() {
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setDialogTitle("Načíst SVG XML");
+        int userSelection = fileChooser.showOpenDialog(this);
+
+        if (userSelection == JFileChooser.APPROVE_OPTION) {
+            File fileToLoad = fileChooser.getSelectedFile();
+            try {
+                String xmlContent = new String(Files.readAllBytes(fileToLoad.toPath()), StandardCharsets.UTF_8);
+                Obrazek loadedImage = XmlUtils.getImage(xmlContent);
+                panel.setShapes(loadedImage.getTvary());
+                panel.repaint();
+                model.setShapes(loadedImage.getTvary());
+                if (!loadedImage.getTvary().isEmpty()) {
+                    tabulkaTvaru.setRowSelectionInterval(0, 0);
+                    updateAttributesBasedOnSelectedShape();
+                }
+                JOptionPane.showMessageDialog(this, "Soubor byl úspěšně načten.", "Načteno", JOptionPane.INFORMATION_MESSAGE);
+            } catch (IOException e) {
+                JOptionPane.showMessageDialog(this, "Nepodařilo se načíst soubor: " + e.getMessage(), "Chyba", JOptionPane.ERROR_MESSAGE);
+            } catch (RuntimeException e) {
+                JOptionPane.showMessageDialog(this, "Chyba při zpracování XML: " + e.getMessage(), "Chyba", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }
+
+
+
 
 
     private void initTabulkuTvaru() {
@@ -103,15 +182,13 @@ public class Frame extends JFrame {
         }
     }
 
-
     private void updateApplicationState(Obrazek updatedObrazek) {
-        panel.setShapes(updatedObrazek.getTvary());  // Nastaví nově upravené tvary
-        panel.repaint();  // Překreslení panelu s novými tvary
+        panel.setShapes(updatedObrazek.getTvary());
+        panel.repaint();
 
-        // Aktualizace datových modelů pro tabulky, pokud to vyžadují
-        model.setShapes(updatedObrazek.getTvary()); // Aktualizuj model tabulky tvary, pokud je to potřeba
+        model.setShapes(updatedObrazek.getTvary());
         if (!updatedObrazek.getTvary().isEmpty()) {
-            tabulkaTvaru.setRowSelectionInterval(0, 0); // Vyberte první tvar
+            tabulkaTvaru.setRowSelectionInterval(0, 0);
             updateAttributesBasedOnSelectedShape();
         }
     }
@@ -132,12 +209,10 @@ public class Frame extends JFrame {
     }
 
     private void configureAndAddTablesToBottom() {
-        // Panel pro držení obou tabulek
         JPanel tablePanel = new JPanel(new GridLayout(1, 2));
         tablePanel.add(new JScrollPane(tabulkaTvaru));
         tablePanel.add(new JScrollPane(tabulkaAtributu));
 
-        // Přidání panelu s tabulkami do spodní části hlavního okna
         add(tablePanel, BorderLayout.SOUTH);
     }
 
