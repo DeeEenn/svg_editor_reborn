@@ -4,6 +4,8 @@ import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 
 public class Frame extends JFrame {
@@ -16,6 +18,8 @@ public class Frame extends JFrame {
     private ModelTabulkyTvaru model;
     private JTable tabulkaAtributu;
     private ModelTabulkyAtributu atributyModel;
+
+    private JMenuItem menuItemZobrazitSVG;
 
     public Frame() {
         super("SVG Editor");
@@ -33,7 +37,19 @@ public class Frame extends JFrame {
     }
 
     private void initMenu(){
+        menuBar = new JMenuBar();
+        menu = new JMenu("Soubor");
+        menuItemZobrazitSVG = new JMenuItem("Zobrazit SVG");
 
+        menuItemZobrazitSVG.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                showSVG();
+            }
+        });
+
+        menu.add(menuItemZobrazitSVG);
+        menuBar.add(menu);
+        setJMenuBar(menuBar);
     }
 
 
@@ -49,6 +65,25 @@ public class Frame extends JFrame {
         JScrollPane tableScrollPane = new JScrollPane(tabulkaTvaru);
         getContentPane().add(tableScrollPane, BorderLayout.WEST);
     }
+
+    private void showSVG() {
+        Obrazek image = createSampleImage();
+        String svgXML = XmlUtils.getXml(image);
+
+        JTextArea textArea = new JTextArea(svgXML, 25, 70);
+        textArea.setEditable(true);
+        JScrollPane scrollPane = new JScrollPane(textArea);
+        JOptionPane.showMessageDialog(null, scrollPane, "SVG XML", JOptionPane.INFORMATION_MESSAGE);
+    }
+
+    private Obrazek createSampleImage() {
+        Obrazek image = new Obrazek();
+        image.getTvary().add(new Elipsa(100, 100, "Elipsa 1", Color.RED, 5, 50));
+        image.getTvary().add(new Obdelnik(150, 150, "Obdelnik 1", Color.BLUE, 5, 100, 50));
+        image.getTvary().add(new Usecka(200, 200, "Usecka 1", Color.GREEN, 5, 250, 250));
+        return image;
+    }
+
 
     private void initTabulkuAtributu() {
         tabulkaAtributu = new JTable(atributyModel);

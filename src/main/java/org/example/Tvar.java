@@ -1,13 +1,25 @@
 package org.example;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
 
+@XmlAccessorType(XmlAccessType.FIELD)
 public abstract class Tvar {
-    int x, y;
+   @XmlAttribute
+    int x;
+    @XmlAttribute
+    int  y;
+    @XmlAttribute
     int tloustka;
-    Color barva;
+    @XmlAttribute
+    @XmlJavaTypeAdapter(ColorAdapter.class)
+    private Color barva;
+    @XmlAttribute
     String nazev;
 
 
@@ -57,6 +69,9 @@ public abstract class Tvar {
         return attributes;
     }
 
+    public Tvar(){
+
+    }
 
     public abstract void kresli(Graphics g);
 

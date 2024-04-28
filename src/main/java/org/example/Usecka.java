@@ -1,10 +1,20 @@
 package org.example;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlRootElement;
 import java.awt.*;
 import java.util.Map;
 
+
+@XmlRootElement(name = "line")
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Usecka extends Tvar {
-    int x2, y2;
+    @XmlAttribute
+    int x2;
+    @XmlAttribute
+    int y2;
 
     public Usecka(int x, int y, String nazev, Color barva, int tloustka, int x2, int y2) {
         super(x, y, nazev, barva, tloustka);
@@ -12,10 +22,13 @@ public class Usecka extends Tvar {
         this.y2 = y2;
     }
 
+    public Usecka(){
+
+    }
 
     @Override
     public void setAttribute(String key, Object value) {
-        super.setAttribute(key, value);  // Volání metody v nadřazené třídě, pokud se nejedná o atribut specifický pro Line
+        super.setAttribute(key, value);
         try {
             switch (key) {
                 case "X2":

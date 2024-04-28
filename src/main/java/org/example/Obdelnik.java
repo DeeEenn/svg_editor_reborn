@@ -1,5 +1,9 @@
 package org.example;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlRootElement;
 import java.awt.*;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -7,13 +11,22 @@ import java.util.regex.Pattern;
 import java.util.List;
 import java.util.ArrayList;
 
+@XmlRootElement(name = "rect")
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Obdelnik extends Tvar {
-    int sirka, vyska;
+    @XmlAttribute
+    int sirka;
+    @XmlAttribute
+    int vyska;
 
     public Obdelnik(int x, int y, String nazev, Color barva, int tloustka, int sirka, int vyska) {
         super(x, y, nazev, barva, tloustka);
         this.sirka = sirka;
         this.vyska = vyska;
+    }
+
+    public Obdelnik(){
+
     }
 
     @Override
