@@ -6,10 +6,10 @@ import java.util.*;
 import java.awt.Color;
 
 public class ModelTabulkyAtributu extends AbstractTableModel {
-    private Tvar tvar; // Aktuálně vybraný tvar
+    private Tvar tvar;
     private String[] columnNames = new String[] { "Attribute", "Value" };
     private List<Map.Entry<String, Object>> attributes = new ArrayList<>();
-    private Panel panel; // Panel pro překreslení
+    private Panel panel;
 
     public ModelTabulkyAtributu(Panel panel) {
         this.panel = panel;
@@ -29,7 +29,7 @@ public class ModelTabulkyAtributu extends AbstractTableModel {
         if (tvar != null) {
             attributes.addAll(tvar.getAttributes().entrySet());
         }
-        fireTableDataChanged();  // Informujte tabulku o změně dat
+        fireTableDataChanged();
     }
 
 

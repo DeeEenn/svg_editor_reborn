@@ -41,8 +41,8 @@ public class Frame extends JFrame {
         initTabulkuAtributu();
         addShapes();
         initMenu();
-        add(panel, BorderLayout.CENTER);  // Panel s vykreslenými tvary
-        configureAndAddTablesToBottom();
+        add(panel, BorderLayout.CENTER);
+        configureTables();
     }
 
     private void initMenu(){
@@ -220,7 +220,7 @@ public class Frame extends JFrame {
         }
     }
 
-    private void configureAndAddTablesToBottom() {
+    private void configureTables() {
         JPanel tablePanel = new JPanel(new GridLayout(1, 2));
         tablePanel.add(new JScrollPane(tabulkaTvaru));
         tablePanel.add(new JScrollPane(tabulkaAtributu));
