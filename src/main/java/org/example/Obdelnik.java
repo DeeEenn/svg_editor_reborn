@@ -31,7 +31,7 @@ public class Obdelnik extends Tvar {
 
     @Override
     public void setAttribute(String key, Object value) {
-        super.setAttribute(key, value); // volání implementace v nadřazené třídě
+        super.setAttribute(key, value);
         switch (key) {
             case "Šířka":
                 this.sirka = Integer.parseInt(value.toString());

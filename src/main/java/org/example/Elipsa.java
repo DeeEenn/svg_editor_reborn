@@ -23,7 +23,7 @@ public class Elipsa extends Tvar {
 
     @Override
     public void setAttribute(String key, Object value) {
-        super.setAttribute(key, value); // volání implementace v nadřazené třídě
+        super.setAttribute(key, value);
         if (key.equals("Rádius")) {
             this.radius = Integer.parseInt(value.toString());
         }

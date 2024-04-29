@@ -73,7 +73,6 @@ public class ModelTabulkyAtributu extends AbstractTableModel {
         String key = attributes.get(rowIndex).getKey();
         Object newValue = aValue;
 
-        // Ošetření pro barvu
         if (key.equals("Barva") && aValue instanceof String) {
             Color currentColor = (Color) attributes.get(rowIndex).getValue();
             newValue = chooseColor(currentColor);
@@ -90,8 +89,5 @@ public class ModelTabulkyAtributu extends AbstractTableModel {
         return newColor != null ? newColor : initialColor;
     }
 
-    private String colorToHex(Color color) {
-        return String.format("#%02X%02X%02X", color.getRed(), color.getGreen(), color.getBlue());
-    }
 
 }

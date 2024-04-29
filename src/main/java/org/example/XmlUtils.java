@@ -12,7 +12,6 @@ public class XmlUtils {
 
     static {
         try {
-            // Include all classes that need to be marshalled/unmarshalled
             ctx = JAXBContext.newInstance(Obrazek.class, Elipsa.class, Obdelnik.class, Usecka.class);
         } catch (JAXBException e) {
             throw new RuntimeException("Failed to create JAXB Context", e);

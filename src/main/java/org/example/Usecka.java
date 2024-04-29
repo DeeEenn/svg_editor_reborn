@@ -7,7 +7,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 import java.awt.*;
 import java.util.Map;
 
-
 @XmlRootElement(name = "line")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Usecka extends Tvar {
@@ -21,11 +20,8 @@ public class Usecka extends Tvar {
         this.x2 = x2;
         this.y2 = y2;
     }
-
     public Usecka(){
-
     }
-
     @Override
     public void setAttribute(String key, Object value) {
         super.setAttribute(key, value);

@@ -154,9 +154,6 @@ public class Frame extends JFrame {
     }
 
 
-
-
-
     private void initTabulkuTvaru() {
         tabulkaTvaru = new JTable(model);
         tabulkaTvaru.getSelectionModel().addListSelectionListener(new ListSelectionListener() {

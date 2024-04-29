@@ -15,6 +15,8 @@ public class Panel extends JPanel {
     private Tvar currentShape;
     private Point startPoint;
 
+    private ModelTabulkyTvaru modelTabulky;
+
 
     public Panel() {
         tvary = new ArrayList<>();
